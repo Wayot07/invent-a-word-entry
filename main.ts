@@ -16,10 +16,10 @@
 // input bytes always yield identical output bytes, so repeated runs
 // agree byte for byte.
 //
-// The gate: /output/entry.txt must be UTF-8 text of 1 to 140 characters,
-// not only white space. This program validates the entry against that
-// gate before writing and fails fast on any violation, then reads the
-// file back and checks it byte for byte.
+// The gate (kit rule: entry must be 1 to 140 characters, single line,
+// UTF-8 text, not only white space). This program validates the entry
+// against that gate before writing and fails fast on any violation,
+// then reads the file back and checks it byte for byte.
 //
 // Local check:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
@@ -39,13 +39,13 @@ function abort(reason: string): never {
   process.exit(1);
 }
 
-// The gate counts characters, not bytes: count Unicode code points.
+// The gate counts characters (Unicode code points), not bytes.
 const charCount = [...ENTRY].length;
 if (charCount < MIN_CHARS || charCount > MAX_CHARS) {
   abort(
     "entry is " +
       charCount +
-      " characters, outside the 1 to 140 gate: " +
+      " characters, violates the rule that the entry must be 1-140 characters, single line: " +
       JSON.stringify(ENTRY),
   );
 }
